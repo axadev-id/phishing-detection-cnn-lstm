@@ -1,0 +1,313 @@
+"""
+PROJECT SUMMARY
+===============
+
+Judul: Deteksi Phishing dengan Deep Learning Model CNN + LSTM Hybrid
+Tipe: Penelitian Tugas Akhir
+
+STRUKTUR PROYEK LENGKAP
+========================
+
+projek_phishing/
+│
+├── dataset/
+│   └── Dataset.csv                          # Dataset 247,952 sampel dengan 41 fitur
+│
+├── src/
+│   ├── config.py                            # Konfigurasi hyperparameters
+│   ├── data_preprocessing.py                # Module preprocessing data
+│   └── predictor.py                         # Helper untuk prediksi URL baru
+│
+├── models/                                   # Folder untuk model (dibuat saat training)
+│   ├── best_cnn_lstm_model.h5              # Model terbaik
+│   ├── scaler.pkl                          # StandardScaler
+│   └── model_summary.txt                   # Summary arsitektur
+│
+├── results/                                  # Folder untuk hasil (dibuat saat training)
+│   ├── training_history.png                # Grafik training
+│   ├── confusion_matrix.png                # Confusion matrix
+│   ├── roc_curve.png                       # ROC curve
+│   ├── probability_distribution.png        # Distribusi probabilitas
+│   ├── performance_comparison.png          # Perbandingan performa
+│   ├── training_history.json               # History JSON
+│   └── evaluation_results.json             # Hasil evaluasi JSON
+│
+├── logs/                                     # Folder untuk TensorBoard logs
+│   └── fit/                                # Training logs
+│
+├── phishing_detection_cnn_lstm.ipynb        # Notebook UTAMA - jalankan ini!
+├── README.md                                # Dokumentasi lengkap
+├── QUICKSTART.md                            # Panduan cepat
+├── requirements.txt                         # Dependencies Python
+└── .gitignore                               # Git ignore file
+
+ARSITEKTUR MODEL
+================
+
+Input Shape: (41 features, 1 channel)
+
+1. CNN Layers:
+   - Conv1D (64 filters, kernel=3) + BatchNorm + MaxPool + Dropout(0.2)
+   - Conv1D (128 filters, kernel=3) + BatchNorm + MaxPool + Dropout(0.2)
+   - Conv1D (256 filters, kernel=3) + BatchNorm + Dropout(0.3)
+
+2. LSTM Layers:
+   - LSTM (128 units, return_sequences=True) + Dropout(0.3)
+   - LSTM (64 units) + Dropout(0.3)
+
+3. Dense Layers:
+   - Dense (64 units, ReLU) + Dropout(0.4)
+   - Dense (32 units, ReLU) + Dropout(0.4)
+   - Output (1 unit, Sigmoid)
+
+Optimizer: Adam (lr=0.001)
+Loss: Binary Crossentropy
+Metrics: Accuracy, Precision, Recall, AUC
+
+CARA MENGGUNAKAN
+================
+
+LANGKAH 1: Install Dependencies
+--------------------------------
+$ pip install -r requirements.txt
+
+LANGKAH 2: Jalankan Notebook
+-----------------------------
+$ jupyter lab
+# Buka: phishing_detection_cnn_lstm.ipynb
+# Jalankan semua cell dari atas ke bawah
+
+LANGKAH 3: Training Model
+--------------------------
+Notebook akan otomatis:
+- Load dataset (247,952 sampel)
+- Preprocessing (split 65% train, 15% val, 20% test)
+- Normalisasi dengan StandardScaler
+- Build model CNN + LSTM
+- Training dengan callbacks (early stopping, checkpoint, reduce LR)
+- Evaluasi dan visualisasi
+
+LANGKAH 4: Lihat Hasil
+-----------------------
+Setelah training, check:
+- models/best_cnn_lstm_model.h5 (model terbaik)
+- results/*.png (visualisasi)
+- results/*.json (metrics)
+
+LANGKAH 5: Prediksi URL Baru
+-----------------------------
+from src.predictor import PhishingDetector
+
+detector = PhishingDetector()
+detector.load_model()
+
+# Prediksi dengan 41 fitur
+features = [...]  # 41 fitur URL
+result = detector.predict_single(features)
+print(result)
+
+FITUR DATASET (41 Fitur)
+=========================
+
+URL Features:
+- url_length
+- number_of_dots_in_url
+- having_repeated_digits_in_url
+- number_of_digits_in_url
+- number_of_special_char_in_url
+- number_of_hyphens_in_url
+- number_of_underline_in_url
+- number_of_slash_in_url
+- number_of_questionmark_in_url
+- number_of_equal_in_url
+- number_of_at_in_url
+- number_of_dollar_in_url
+- number_of_exclamation_in_url
+- number_of_hashtag_in_url
+- number_of_percent_in_url
+
+Domain Features:
+- domain_length
+- number_of_dots_in_domain
+- number_of_hyphens_in_domain
+- having_special_characters_in_domain
+- number_of_special_characters_in_domain
+- having_digits_in_domain
+- number_of_digits_in_domain
+- having_repeated_digits_in_domain
+
+Subdomain Features:
+- number_of_subdomains
+- having_dot_in_subdomain
+- having_hyphen_in_subdomain
+- average_subdomain_length
+- average_number_of_dots_in_subdomain
+- average_number_of_hyphens_in_subdomain
+- having_special_characters_in_subdomain
+- number_of_special_characters_in_subdomain
+- having_digits_in_subdomain
+- number_of_digits_in_subdomain
+- having_repeated_digits_in_subdomain
+
+Path & Other Features:
+- having_path
+- path_length
+- having_query
+- having_fragment
+- having_anchor
+- entropy_of_url
+- entropy_of_domain
+
+Target:
+- Type (0 = Legitimate, 1 = Phishing)
+
+EXPECTED RESULTS
+================
+
+Model diharapkan mencapai:
+- Accuracy: > 95%
+- Precision: > 95%
+- Recall: > 95%
+- F1-Score: > 95%
+- AUC-ROC: > 0.98
+
+Actual results akan bervariasi tergantung:
+- Random seed
+- Hardware (CPU vs GPU)
+- Training duration
+
+TRAINING CALLBACKS
+==================
+
+1. Early Stopping:
+   - Monitor: val_loss
+   - Patience: 15 epochs
+   - Restore best weights
+
+2. Model Checkpoint:
+   - Monitor: val_accuracy
+   - Save best only
+
+3. Reduce Learning Rate:
+   - Monitor: val_loss
+   - Factor: 0.5
+   - Patience: 7 epochs
+   - Min LR: 1e-7
+
+4. TensorBoard:
+   - Histogram freq: 1
+   - Write graph: True
+
+MONITORING DENGAN TENSORBOARD
+==============================
+
+$ tensorboard --logdir=logs/fit
+# Buka: http://localhost:6006
+
+Visualisasi:
+- Scalars: Loss, accuracy, precision, recall, AUC
+- Graphs: Model architecture
+- Histograms: Weight distributions
+
+TROUBLESHOOTING
+===============
+
+Problem 1: Memory Error
+-----------------------
+Solution: Kurangi BATCH_SIZE di config.py
+BATCH_SIZE = 32  # atau 16
+
+Problem 2: GPU tidak terdeteksi
+--------------------------------
+Solution: 
+- Install CUDA toolkit
+- Atau jalankan di CPU (set USE_GPU = False)
+
+Problem 3: Import Error
+------------------------
+Solution:
+$ pip install --upgrade tensorflow keras scikit-learn
+
+Problem 4: Training terlalu lama
+---------------------------------
+Solution:
+- Kurangi EPOCHS di config.py
+- Atau biarkan early stopping bekerja
+
+EVALUASI METRICS
+================
+
+1. Confusion Matrix:
+   - True Positive (TP): Phishing detected as Phishing ✓
+   - True Negative (TN): Legitimate detected as Legitimate ✓
+   - False Positive (FP): Legitimate detected as Phishing ✗
+   - False Negative (FN): Phishing detected as Legitimate ✗✗ (BAHAYA!)
+
+2. Precision:
+   - Dari semua yang diprediksi Phishing, berapa yang benar Phishing
+   - Precision = TP / (TP + FP)
+
+3. Recall (Sensitivity):
+   - Dari semua yang benar Phishing, berapa yang terdeteksi
+   - Recall = TP / (TP + FN)
+
+4. F1-Score:
+   - Harmonic mean dari Precision dan Recall
+   - F1 = 2 * (Precision * Recall) / (Precision + Recall)
+
+5. AUC-ROC:
+   - Area Under ROC Curve
+   - Mengukur kemampuan model memisahkan kelas
+   - Nilai 1.0 = perfect, 0.5 = random
+
+BEST PRACTICES
+==============
+
+1. Selalu jalankan notebook dari awal
+2. Monitor training metrics untuk overfitting
+3. Gunakan class weights untuk imbalanced data
+4. Save model setelah training
+5. Test dengan data baru sebelum production
+6. Document semua experiment dan hyperparameters
+
+NEXT STEPS
+==========
+
+Setelah model trained:
+1. ✅ Evaluasi performa pada test set
+2. ✅ Analisis confusion matrix
+3. ✅ Cek false positives dan false negatives
+4. ✅ Deploy untuk prediksi real-time
+5. ✅ Monitor performance di production
+6. ✅ Retrain dengan data baru jika perlu
+
+REFERENCES
+==========
+
+- TensorFlow Documentation: https://www.tensorflow.org/
+- Keras API: https://keras.io/
+- Scikit-learn: https://scikit-learn.org/
+- CNN Tutorial: https://www.tensorflow.org/tutorials/images/cnn
+- LSTM Tutorial: https://www.tensorflow.org/guide/keras/rnn
+
+AUTHOR
+======
+
+Penelitian Tugas Akhir
+Deteksi Phishing dengan Deep Learning
+
+Date: 2025
+Framework: TensorFlow/Keras
+Python: >= 3.8
+
+CONTACT & SUPPORT
+=================
+
+Untuk pertanyaan atau issues:
+- Email: [your-email]
+- GitHub: [your-repo]
+
+================================
+END OF PROJECT SUMMARY
+================================
+"""
