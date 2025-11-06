@@ -983,15 +983,6 @@ Untuk analisis mendalam dan perbandingan detail, lihat:
 
 ---
 
-## 📞 Support & Kontribusi
-
-Untuk pertanyaan tentang model improved:
-- 📧 Email: [your-email]
-- 🐙 Repository: https://github.com/axadev-id/phishing-detection-cnn-lstm
-- 📝 Issues: Open issue di GitHub untuk bug report atau feature request
-
----
-
 **Update:** November 6, 2025  
 **Status:** ✅ Model Improved Production-Ready  
 **Recommendation:** Use improved model for deployment
