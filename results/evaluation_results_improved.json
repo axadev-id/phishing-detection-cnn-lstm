@@ -1,0 +1,39 @@
+{
+    "model_version": "improved_cnn_lstm_hybrid",
+    "improvements_applied": [
+        "Feature Engineering (3 new features)",
+        "SMOTE Data Balancing",
+        "Bidirectional LSTM",
+        "Attention Mechanism",
+        "Residual Connections",
+        "Cyclical Learning Rate",
+        "Threshold Tuning",
+        "SHAP Explainability"
+    ],
+    "optimal_threshold": 0.46937301754951477,
+    "test_accuracy": 0.9231498285944747,
+    "test_precision": 0.9281904680633187,
+    "test_recall": 0.9108952349049493,
+    "test_f1_score": 0.9194615270821446,
+    "test_auc": 0.9756780603735182,
+    "confusion_matrix": {
+        "true_negative": 24025,
+        "false_positive": 1683,
+        "false_negative": 2128,
+        "true_positive": 21754
+    },
+    "comparison_with_original": {
+        "original_accuracy": 92.17,
+        "improved_accuracy": 92.31498285944747,
+        "improvement_accuracy": 0.1449828594474667,
+        "original_precision": 93.48,
+        "improved_precision": 92.81904680633187,
+        "improvement_precision": -0.660953193668135,
+        "original_recall": 90.01,
+        "improved_recall": 91.08952349049493,
+        "improvement_recall": 1.0795234904949211,
+        "original_f1": 91.71,
+        "improved_f1": 91.94615270821446,
+        "improvement_f1": 0.23615270821446188
+    }
+}

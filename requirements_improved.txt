@@ -1,0 +1,29 @@
+# Requirements for Improved CNN-LSTM Phishing Detection Model
+
+# Core Deep Learning
+tensorflow>=2.20.0
+
+# Data Processing
+pandas>=2.2.0
+numpy>=2.2.0
+scikit-learn>=1.6.0
+scipy>=1.15.0
+
+# Data Balancing (SMOTE)
+imbalanced-learn>=0.14.0
+
+# Visualization
+matplotlib>=3.10.0
+seaborn>=0.13.0
+
+# Model Explainability
+shap>=0.49.0
+
+# Additional utilities
+joblib>=1.4.0
+tqdm>=4.67.0
+
+# For Jupyter Notebook
+jupyter>=1.0.0
+notebook>=7.0.0
+ipykernel>=6.30.0
